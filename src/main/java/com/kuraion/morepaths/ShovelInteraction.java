@@ -8,12 +8,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -23,7 +20,7 @@ public class ShovelInteraction {
     @SubscribeEvent
     public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
 
-        Player p = event.getEntity();
+        Player p = event.getPlayer();
 
         ItemStack held = p.getMainHandItem();
 
@@ -43,7 +40,7 @@ public class ShovelInteraction {
         if(!playerCanEditBlock)
             return;
 
-        Level world = event.getLevel();
+        Level world = event.getWorld();
 
         Material blockAbove = world.getBlockState(pos.above()).getMaterial();
         if(blockAbove != Material.AIR)
@@ -60,7 +57,6 @@ public class ShovelInteraction {
 
         if(!world.isClientSide()) {
             world.setBlock(event.getPos(), pathBlock.defaultBlockState(), 11);
-            world.gameEvent(GameEvent.BLOCK_CHANGE, event.getPos(), GameEvent.Context.of(p, pathBlock.defaultBlockState()));
             held.hurtAndBreak(1, p, (pl) -> { pl.broadcastBreakEvent(EquipmentSlot.MAINHAND); });
         }
 

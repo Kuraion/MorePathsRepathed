@@ -4,7 +4,6 @@ import com.kuraion.morepaths.init.MorepathsModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.Random;
 
 public class OtherPathBlock extends DirtPathBlock {
 
@@ -46,7 +47,7 @@ public class OtherPathBlock extends DirtPathBlock {
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
         worldIn.setBlockAndUpdate(pos, pushEntitiesUp(state, _pathedFrom.defaultBlockState(), worldIn, pos));
     }
 
@@ -67,7 +68,7 @@ public class OtherPathBlock extends DirtPathBlock {
 
     @SubscribeEvent()
     public static void doPlayerHarvestCheck(PlayerEvent.HarvestCheck harvestEvent) {
-        Player p = harvestEvent.getEntity();
+        Player p = harvestEvent.getPlayer();
 
         BlockState block = harvestEvent.getTargetBlock();
         Block snowPath = MorepathsModBlocks.SNOW_PATH.get();
